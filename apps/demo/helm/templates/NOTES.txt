@@ -1,0 +1,29 @@
+Demo app deployed successfully.
+
+  Release : {{ .Release.Name }}
+  Namespace: {{ .Release.Namespace }}
+  Image    : {{ .Values.image.repository }}:{{ .Values.image.tag }}
+
+Access the app:
+
+{{- if .Values.ingress.enabled }}
+  http://{{ .Values.ingress.host }}{{ .Values.ingress.path }}
+{{- else }}
+  kubectl port-forward svc/{{ .Release.Name }} -n {{ .Release.Namespace }} 8080:{{ .Values.service.port }}
+  http://localhost:8080
+{{- end }}
+
+Endpoints:
+  GET /health    liveness check
+  GET /ready     readiness check
+  GET /metrics   Prometheus metrics
+  GET /items     sample items (traces + logs)
+  GET /error     sample error endpoint
+
+{{- if .Values.hpa.enabled }}
+HPA is enabled ({{ .Values.hpa.minReplicas }}–{{ .Values.hpa.maxReplicas }} replicas).
+{{- end }}
+
+{{- if .Values.serviceMonitor.enabled }}
+ServiceMonitor is enabled. Metrics are scraped by Prometheus every {{ .Values.serviceMonitor.interval }}.
+{{- end }}
