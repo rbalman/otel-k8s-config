@@ -1,0 +1,8 @@
+repoURL: https://github.com/rbalman/temp-repo.git
+targetRevision: HEAD
+appsPath: dev/apps
+
+apps:
+  demo:
+    namespace: default
+    path: apps/demo/helm

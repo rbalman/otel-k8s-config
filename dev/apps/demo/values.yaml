@@ -1,0 +1,9 @@
+image:
+  repository: demo-app
+  tag: v0.0.3
+  pullPolicy: IfNotPresent
+
+otel:
+  serviceName: demo-app
+  endpoint: otel-collector.monitoring.svc.cluster.local:4317
+  resourceAttributes: "environment=dev,k8s.cluster.name=gokite"

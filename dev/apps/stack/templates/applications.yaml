@@ -1,0 +1,38 @@
+{{- range $name, $app := .Values.apps }}
+{{- if ne $app.enabled false }}
+{{- $valuesPath := $app.valuesPath | default (printf "%s/%s/values.yaml" $.Values.appsPath $name) }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $name }}
+  namespace: argocd
+  {{- if $app.syncWave }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ $app.syncWave | quote }}
+  {{- end }}
+  finalizers:
+    - resources-finalizer.argocd.io
+spec:
+  project: default
+  sources:
+    - repoURL: {{ $.Values.repoURL }}
+      targetRevision: {{ $.Values.targetRevision }}
+      path: {{ $app.path }}
+      helm:
+        valueFiles:
+          - $values/{{ $valuesPath }}
+    - repoURL: {{ $.Values.repoURL }}
+      targetRevision: {{ $.Values.targetRevision }}
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ $app.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}
+{{- end }}
