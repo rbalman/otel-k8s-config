@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: demo-app:v0.0.1
+          image: demo-app:v0.0.3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -29,6 +29,21 @@ spec:
               value: demo-app
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: trace-collector-opentelemetry-collector.monitoring:4317
+            # Environment attributes — injected by k8s, not hardcoded in app
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "my.test=running-fine"
+            - name: K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           livenessProbe:
             httpGet:
               path: /health

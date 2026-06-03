@@ -47,6 +47,14 @@ config:
       limit_percentage: 80
       spike_limit_percentage: 25
     batch: {}
+    resource:
+      attributes:
+        - key: environment
+          value: dev
+          action: insert
+        - key: k8s.cluster.name
+          value: gokite
+          action: insert
 
   exporters:
     otlp/jaeger:
@@ -63,7 +71,8 @@ config:
           - otlp
         processors:
           - memory_limiter
-          - k8sattributes
+          - k8s_attributes
+          - resource
           - batch
         exporters:
           - otlp/jaeger

@@ -6,6 +6,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /demo .
 
 FROM scratch
+USER 65534:65534
 COPY --from=builder /demo /demo
 EXPOSE 8080
 ENTRYPOINT ["/demo"]

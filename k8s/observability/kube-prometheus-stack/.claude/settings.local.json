@@ -9,8 +9,7 @@
       "Read(//Users/balman/go/bin/**)",
       "Read(//opt/homebrew/bin/**)",
       "WebFetch(domain:oneuptime.com)",
-      "WebFetch(domain:grafana.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:grafana.com)"
     ]
   }
 }

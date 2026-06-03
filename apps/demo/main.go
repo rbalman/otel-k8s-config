@@ -214,7 +214,11 @@ func itemsHandler(w http.ResponseWriter, r *http.Request) {
 	serSpan.End()
 
 	span.SetAttributes(attribute.Bool("cache.hit", cacheHit), attribute.Int("items.count", 5))
-	logCtx(ctx, slog.LevelInfo, "items fetched", "cache_hit", cacheHit, "count", 5)
+	logLevel := slog.LevelInfo
+	if !cacheHit {
+		logLevel = slog.LevelWarn
+	}
+	logCtx(ctx, logLevel, "items fetched", "cache_hit", cacheHit, "count", 5)
 
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintln(w, `{"items":["alpha","beta","gamma","delta","epsilon"]}`)
