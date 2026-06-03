@@ -1,5 +1,5 @@
 image:
-  repository: demo-app
+  repository: balman/otel-demo
   tag: v0.0.3
   pullPolicy: IfNotPresent
 
