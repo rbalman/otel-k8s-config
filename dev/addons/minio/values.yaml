@@ -1,10 +1,23 @@
-mode: standalone  # or distributed for multi-node setup
+mode: standalone
 persistence:
   size: 10Gi
 resources:
   requests:
     memory: 1Gi
-accessKey: "minioadmin"  # Change this
-secretKey: "minioadmin"  # Change this
+rootUser: "minioadmin"
+rootPassword: "minioadmin"
 service:
   type: ClusterIP
+
+buckets:
+  - name: loki
+    policy: none
+    purge: false
+  - name: thanos
+    policy: none
+    purge: false
+
+users:
+  - accessKey: loki
+    secretKey: loki-secret
+    policy: readwrite

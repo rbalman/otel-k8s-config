@@ -16,14 +16,14 @@ loki:
       active_index_directory: /var/loki/index
       cache_location: /var/loki/index_cache
     aws:
-      s3: http://minioadmin:minioadmin@minio.minio.svc:9000/loki
+      s3: http://loki:loki-secret@minio.minio.svc:9000/loki
       s3forcepathstyle: true
   storage:
     type: s3
     s3:
       endpoint: minio.minio.svc:9000
-      accessKeyId: minioadmin
-      secretAccessKey: minioadmin
+      accessKeyId: loki
+      secretAccessKey: loki-secret
       insecure: true
       s3ForcePathStyle: true
     bucketNames:
