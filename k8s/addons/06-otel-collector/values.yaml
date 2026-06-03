@@ -71,7 +71,7 @@ config:
           - otlp
         processors:
           - memory_limiter
-          - k8s_attributes
+          - k8sattributes
           - resource
           - batch
         exporters:

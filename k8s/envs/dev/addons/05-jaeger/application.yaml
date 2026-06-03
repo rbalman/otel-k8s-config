@@ -13,12 +13,6 @@ spec:
     - repoURL: https://jaegertracing.github.io/helm-charts
       chart: jaeger
       targetRevision: 4.8.0
-      helm:
-        valueFiles:
-          - $values/k8s/addons/05-jeager/values.yaml
-    - repoURL: https://github.com/rbalman/temp-repo.git
-      targetRevision: HEAD
-      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
