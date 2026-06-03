@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "3"
-  finalizers:
-    - resources-finalizer.argocd.io
+  #finalizers:
+#   - resources-finalizer.argocd.io
 spec:
   project: default
   sources:
@@ -15,7 +15,7 @@ spec:
       targetRevision: 17.0.0
       helm:
         valueFiles:
-          - $values/k8s/observability/03-loki/values.yaml
+          - $values/k8s/addons/03-loki/values.yaml
     - repoURL: https://github.com/rbalman/temp-repo.git
       targetRevision: HEAD
       ref: values

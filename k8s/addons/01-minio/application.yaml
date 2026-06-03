@@ -3,8 +3,8 @@ kind: Application
 metadata:
   name: minio
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.io
+  #finalizers:
+#   - resources-finalizer.argocd.io
 spec:
   project: default
   sources:
@@ -14,7 +14,7 @@ spec:
       targetRevision: 5.4.0
       helm:
         valueFiles:
-          - $values/k8s/observability/01-minio/values.yaml
+          - $values/k8s/addons/01-minio/values.yaml
 
     # Git repo — provides the values file above via $values ref
     - repoURL: https://github.com/rbalman/temp-repo.git
