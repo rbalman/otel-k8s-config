@@ -1,0 +1,44 @@
+# apiVersion: monitoring.coreos.com/v1alpha1
+# kind: AlertmanagerConfig
+# metadata:
+#   name: discord
+#   labels:
+#     alertmanagerConfig: discord
+# spec:
+#   route:
+#     receiver: "null"
+#     continue: true
+#     groupBy: ["alertname", "namespace"]
+#     groupWait: 30s
+#     groupInterval: 5m
+#     repeatInterval: 12h
+#     routes:
+#       - matchers:
+#           - name: severity
+#             value: "critical"
+#           - name: team
+#             value: "devops"
+#         receiver: "discord"
+#         repeatInterval: 1h
+#       - matchers:
+#           - name: severity
+#             value: "warning"
+#           - name: team
+#             value: "devops"
+#         receiver: "discord"
+#   receivers:
+#     - name: discord
+#       discordConfigs:
+#         - apiURL:
+#             name: discord-webhook-secret
+#             key: webhook-url
+#           title: |
+#             {{`[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}`}}
+#           message: |
+#             {{`{{ range .Alerts }}
+#             **Summary:** {{ .Annotations.summary }}
+#             **Namespace:** {{ .Labels.namespace }}
+#             **Severity:** {{ .Labels.severity }}
+#             **Description:** {{ .Annotations.description }}
+#             {{ end }}`}}
+#     - name: "null"

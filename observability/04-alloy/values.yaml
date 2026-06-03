@@ -1,0 +1,218 @@
+serviceMonitor: 
+  enabled: true
+alloy:
+  tolerations:
+    - operator: Exists
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  configMap:
+    content: |
+      // Send to Loki
+      loki.write "k8s" {
+        endpoint {
+          url = "http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push"
+          //basic_auth {
+          //  username = "<USERNAME>"
+          //  password = "<PASSWORD>"
+          //}
+        }
+      }
+
+      discovery.kubernetes "pod" {
+        role = "pod"
+        // Restrict to pods on the node to reduce cpu & memory usage
+        selectors {
+          role = "pod"
+          field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+        }
+        //to limit to specific namespace
+        //namespaces {
+        //   names = ["csauditor"]
+        //}
+      }
+
+      discovery.relabel "pod_logs" {
+        targets = discovery.kubernetes.pod.targets
+
+        // Label creation - "namespace" field from "__meta_kubernetes_namespace"
+        rule {
+          source_labels = ["__meta_kubernetes_namespace"]
+          action = "replace"
+          target_label = "namespace"
+        }
+
+        // Label creation - "pod" field from "__meta_kubernetes_pod_name"
+        rule {
+          source_labels = ["__meta_kubernetes_pod_name"]
+          action = "replace"
+          target_label = "pod"
+        }
+
+        // Label creation - "container" field from "__meta_kubernetes_pod_container_name"
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_name"]
+          action = "replace"
+          target_label = "container"
+        }
+
+        // Label creation -  "app" field from "__meta_kubernetes_pod_label_app_kubernetes_io_name"
+        rule {
+          source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+          action = "replace"
+          target_label = "app"
+        }
+
+        // Label creation -  "job" field from "__meta_kubernetes_namespace" and "__meta_kubernetes_pod_container_name"
+        // Concatenate values __meta_kubernetes_namespace/__meta_kubernetes_pod_container_name
+        rule {
+          source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
+          action = "replace"
+          target_label = "job"
+          separator = "/"
+          replacement = "$1"
+        }
+
+        // Label creation - "__path__" field from "__meta_kubernetes_pod_uid" and "__meta_kubernetes_pod_container_name"
+        // Concatenate values __meta_kubernetes_pod_uid/__meta_kubernetes_pod_container_name.log
+        rule {
+          source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+          action = "replace"
+          target_label = "__path__"
+          separator = "/"
+          replacement = "/var/log/pods/*$1/*.log"
+        }
+
+        // Label creation -  "container_runtime" field from "__meta_kubernetes_pod_container_id"
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_id"]
+          action = "replace"
+          target_label = "container_runtime"
+          regex = `^(\S+):\/\/.+$`
+          replacement = "$1"
+        }
+
+        // workload kind: Deployment, DaemonSet, StatefulSet, etc.
+        rule {
+          source_labels = ["__meta_kubernetes_pod_controller_kind"]
+          action = "replace"
+          target_label = "controller_kind"
+        }
+
+        // workload name (e.g. demo-app, loki)
+        rule {
+          source_labels = ["__meta_kubernetes_pod_controller_name"]
+          action = "replace"
+          target_label = "controller_name"
+        }
+
+        // pod IP
+        rule {
+          source_labels = ["__meta_kubernetes_pod_ip"]
+          action = "replace"
+          target_label = "pod_ip"
+        }
+      }
+
+      // loki.source.kubernetes tails logs from Kubernetes containers using the Kubernetes API.
+      loki.source.kubernetes "pod_logs" {
+        targets    = discovery.relabel.pod_logs.output
+        forward_to = [loki.process.pod_logs.receiver]
+      }
+
+      // loki.process receives log entries from other Loki components, applies one or more processing stages,
+      // and forwards the results to the list of receivers in the component's arguments.
+      loki.process "pod_logs" {
+        stage.static_labels {
+            values = {
+              cluster = "kind-cluster",
+            }
+        }
+
+        //Mark: Indexing trace co-relating data with logs
+        stage.json {
+          expressions = {
+            trace_id   = "trace_id",
+            // span_id    = "span_id",
+            // request_id = "request_id",
+          }
+        }
+
+        stage.structured_metadata {
+          values = {
+            trace_id   = "trace_id",
+            // span_id    = "span_id",
+            // request_id = "request_id",
+          }
+        }
+
+        forward_to = [loki.write.k8s.receiver]
+      }
+
+
+      // loki.source.kubernetes_events tails events from the Kubernetes API and converts them
+      // into log lines to forward to other Loki components.
+      loki.source.kubernetes_events "cluster_events" {
+        job_name   = "integrations/kubernetes/eventhandler"
+        log_format = "logfmt"
+        forward_to = [
+          loki.process.cluster_events.receiver,
+        ]
+      }
+
+      // loki.process receives log entries from other loki components, applies one or more processing stages,
+      // and forwards the results to the list of receivers in the component's arguments.
+      loki.process "cluster_events" {
+        forward_to = [loki.write.k8s.receiver]
+
+        stage.static_labels {
+          values = {
+            cluster = "kind-cluster",
+          }
+        }
+
+        stage.static_labels {
+          values = {
+            type = "k8s-events",
+          }
+        }
+
+        stage.labels {
+          values = {
+            kubernetes_cluster_events = "job",
+          }
+        }
+      }
+
+      prometheus.exporter.unix "nodes" {
+      }
+
+      prometheus.scrape "unix" {
+        scrape_interval = "10s"
+        targets    = prometheus.exporter.unix.nodes.targets
+        forward_to = [ prometheus.relabel.to_be_compatible.receiver, ]
+      }
+
+      prometheus.relabel "to_be_compatible" {
+        forward_to = [ prometheus.remote_write.k8s.receiver, ]
+
+        rule {
+            source_labels  = ["exporter"]
+            target_label   = "exporter"
+            replacement    = "alloy"
+        }
+        rule {
+            source_labels  = ["job"]
+            target_label   = "job"
+            replacement    = sys.env("monitoring_group")
+        }
+      }
+
+      prometheus.remote_write "k8s" {
+          endpoint { url = "http://prom-stack-kube-prometheus-prometheus.monitoring:9090/api/v1/write" }
+      }
+

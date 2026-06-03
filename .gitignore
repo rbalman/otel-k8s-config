@@ -1,0 +1,29 @@
+# Helm
+charts/
+*.tgz
+
+# Go
+apps/*/bin/
+apps/*/tmp/
+
+# Secrets & credentials
+*.env
+.env.*
+*secret*.yaml
+*secrets*.yaml
+*credentials*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Terraform (if added later)
+*.tfstate
+*.tfstate.backup
+.terraform/

@@ -1,0 +1,206 @@
+kube-prometheus-stack:
+  prometheus:
+    enabled: true
+    prometheusSpec:
+      enableAdminAPI: true
+      enableRemoteWriteReceiver: true
+      ## Mark: Can be changed to higher values
+      retention: 3d
+      podMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      ruleSelectorNilUsesHelmValues: false
+      priorityClassName: monitor-critical
+      externalLabels:
+        cluster: local
+      #Mark: Optional
+      # thanos:
+      #   objectStorageConfig:
+      #     secret:
+      #       type: S3
+      #       config:
+      #         bucket: thanos
+      #         endpoint: minio.minio.svc:9000
+      #         region: us-east-1
+      #         ## Mark: Can be passed to use existing secret
+      #         access_key: minioadmin
+      #         secret_key: minioadmin
+      #         insecure: true
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard
+            accessModes: ["ReadWriteOnce"]
+            resources:
+            ## Mark: Can be changed to higher values
+              requests:
+                storage: 1Gi
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "800Mi"
+        limits:
+          cpu: "500m"
+          memory: "2Gi"
+
+  grafana:
+    additionalDataSources:
+    - name: Loki
+      type: loki
+      uid: loki
+      url: http://loki-gateway.loki.svc.cluster.local
+      access: proxy
+      isDefault: false
+      jsonData:
+        derivedFields:
+          - name: trace_id
+            matcherType: label
+            matcherRegex: trace_id
+            url: "$${__value.raw}"
+            datasourceUid: jaeger
+    - name: Jaeger
+      type: jaeger
+      uid: jaeger
+      url: http://jaeger.monitoring.svc.cluster.local:16686
+      access: proxy
+      jsonData:
+        tracesToLogs:
+          datasourceUid: loki
+          filterByTraceID: true
+          filterBySpanID: false
+          customQuery: true
+          query: '{namespace="default"} | json | trace_id="${__trace.traceId}"'
+    enabled: true
+    adminPassword: changeme
+    priorityClassName: monitor-critical
+    resources:
+      requests:
+        cpu: 500m
+        memory: 800Mi
+      limits:
+        cpu: 1
+        memory: 2Gi
+    persistence:
+      enabled: true
+      storageClassName: standard
+      size: 2Gi
+    # ingress:
+    #   enabled: true
+    #   ingressClassName: alb
+    #   annotations:
+    #     alb.ingress.kubernetes.io/group.name: csauditor
+    #     alb.ingress.kubernetes.io/group.order: "20" 
+    #     kubernetes.io/ingress.class: alb
+    #     alb.ingress.kubernetes.io/scheme: internet-facing
+    #     alb.ingress.kubernetes.io/target-type: ip
+    #     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    #     alb.ingress.kubernetes.io/ssl-redirect: "443"
+    #     external-dns.alpha.kubernetes.io/hostname: grafana.uat.fundevops.com
+    #   hosts:
+    #     - grafana.uat.fundevops.com
+    defaultDashboardsEnabled: true
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: default
+            orgId: 1
+            folder: ""
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        node-exporter:
+          gnetId: 1860
+          revision: 37
+          datasource: Prometheus
+        kubernetes-cluster:
+          gnetId: 7249
+          revision: 1
+          datasource: Prometheus
+        kube-state-metrics:
+          gnetId: 13332
+          revision: 12
+          datasource: Prometheus
+
+  kube-state-metrics:
+    enabled: false
+    extraArgs:
+      - --metric-labels-allowlist=nodes=[*]
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  nodeExporter:
+    enabled: false
+
+  prometheusNodeExporter:
+    enabled: false
+    # resources:
+    #   requests:
+    #     cpu: 50m
+    #     memory: 64Mi
+    #   limits:
+    #     cpu: 200m
+    #     memory: 128Mi
+
+  prometheusOperator:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+    admissionWebhooks:
+      patch: {}
+      createSecretJob: {}
+      patchWebhookJob: {}
+  
+
+  alertmanager:
+    enabled: true
+    alertmanagerSpec:
+      alertmanagerConfigMatcherStrategy:
+        type: None
+
+
+      alertmanagerConfigSelector:
+        matchLabels:
+          alertmanagerConfig: discord
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 512Mi
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 1Gi
+
+  kubeApiServer:
+    enabled: false
+
+  kubeControllerManager:
+    enabled: false
+
+  kubeScheduler:
+    enabled: false 
+
+  kubeEtcd:
+    enabled: false
+
+  kubeProxy:
+    enabled: false
