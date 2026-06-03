@@ -16,7 +16,7 @@ spec:
       helm:
         valueFiles:
           - $values/k8s/observability/05-jeager/values.yaml
-    - repoURL: https://github.com/rbalman/gokite.git
+    - repoURL: https://github.com/rbalman/temp-repo.git
       targetRevision: HEAD
       ref: values
   destination:
