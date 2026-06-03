@@ -8,7 +8,7 @@ prometheus:
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
-    priorityClassName: monitor-critical
+    # priorityClassName: monitor-critical
     externalLabels:
       cluster: local
     #Mark: Optional
