@@ -11,8 +11,8 @@
 ## 1. Create the cluster
 
 ```bash
-kind create cluster --name gokite
-kubectl cluster-info --context kind-gokite
+kind create cluster --config kind.yaml
+kubectl cluster-info --context kind-gokite-cluster
 ```
 
 ---
@@ -23,11 +23,10 @@ kubectl cluster-info --context kind-gokite
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 
-helm upgrade --install argocd argo/argo-cd \
+helm upgrade --install argocd dev/argocd \
   --namespace argocd \
-  --version 9.5.17 \
   --create-namespace \
-  --values dev/argocd/values.yaml
+  --dependency-update
 ```
 
 Wait for ArgoCD to be ready:
@@ -45,11 +44,17 @@ kubectl get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d && echo
 ```
 
-Access the UI (port-forward in a separate terminal):
+Access the UI via ingress (once ingress-nginx is deployed):
+
+```
+http://localhost:8080/argocd  (user: admin)
+```
+
+Or via port-forward if ingress is not yet available:
 
 ```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-# open https://localhost:8080  (user: admin)
+kubectl port-forward svc/argocd-server -n argocd 9090:80
+# open http://localhost:9090  (user: admin)
 ```
 
 ---
@@ -77,21 +82,24 @@ kubectl label secret gokite-repo \
 
 ```bash
 kubectl apply -f dev/addons/bootstrap.yaml
+kubectl apply -f dev/apps/bootstrap.yaml
 ```
 
-This creates the `addons` ArgoCD Application which renders `dev/addons/stack/` as a Helm chart and deploys all child applications in sync-wave order:
+This creates the ArgoCD Applications which render the Helm wrapper charts under `dev/addons/` and `dev/apps/` and deploy all child applications in sync-wave order:
 
-| Wave | App |
-|------|-----|
-| 1 | minio |
-| 2 | prom-stack |
+| Wave | Addon |
+|------|-------|
+| 1 | ingress, minio |
+| 2 | prometheus, grafana |
 | 3 | loki, jaeger |
-| 4 | alloy, otel-collector |
+| 4 | otel-cluster, otel-node |
 
 ---
 
 ## 5. Manage apps
 
-**Disable an app** — set `enabled: false` in `dev/addons/stack/values.yaml` and push.
+**Disable an addon** — set `enabled: false` in `dev/addons/stack/values.yaml` and push.
 
-**Add a new app** — add an entry under `apps:` in `dev/addons/stack/values.yaml` and create `dev/addons/<name>/values.yaml`.
+**Add a new addon** — add an entry under `apps:` in `dev/addons/stack/values.yaml` and create `dev/addons/<name>/Chart.yaml` + `dev/addons/<name>/values.yaml`.
+
+**Upgrade a chart** — bump `version:` in the relevant `dev/addons/<name>/Chart.yaml` and push. ArgoCD picks it up on the next sync.

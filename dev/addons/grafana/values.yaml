@@ -1,6 +1,12 @@
 grafana:
   adminPassword: changeme
 
+  ingress:
+    enabled: true
+    hosts:
+      - grafana.localhost
+    pathType: Prefix
+
   persistence:
     enabled: true
     storageClassName: standard

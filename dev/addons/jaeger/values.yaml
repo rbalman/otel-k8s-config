@@ -2,6 +2,13 @@ jaeger:
   allInOne:
     enabled: true
 
+  jaeger:
+    ingress:
+      enabled: true
+      hosts:
+        - jaeger.localhost
+      pathType: Prefix
+
   provisionDataStore:
     cassandra: false
 

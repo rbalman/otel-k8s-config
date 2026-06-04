@@ -1,5 +1,11 @@
 prometheus:
   server:
+    ingress:
+      enabled: true
+      hosts:
+        - prometheus.localhost
+      pathType: Prefix
+
     retention: "3d"
     extraFlags:
       - web.enable-remote-write-receiver

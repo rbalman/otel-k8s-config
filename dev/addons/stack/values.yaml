@@ -3,6 +3,11 @@ revision: HEAD
 addonsPath: dev/addons
 
 apps:
+  ingress:
+    enabled: true
+    syncWave: "1"
+    namespace: ingress-nginx
+
   minio:
     enabled: true
     syncWave: "1"

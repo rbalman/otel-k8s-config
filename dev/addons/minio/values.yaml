@@ -10,6 +10,20 @@ minio:
   service:
     type: ClusterIP
 
+  ingress:
+    enabled: true
+    hosts:
+      - minio.localhost
+    path: /
+    pathType: Prefix
+
+  consoleIngress:
+    enabled: true
+    hosts:
+      - minio-console.localhost
+    path: /
+    pathType: Prefix
+
   buckets:
     - name: loki
       policy: none
