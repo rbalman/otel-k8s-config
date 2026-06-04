@@ -39,3 +39,25 @@ prometheus:
 
   prometheus-node-exporter:
     enabled: false
+
+  scrapeConfigs:
+    prometheus:
+      enabled: false
+    prometheus-pushgateway:
+      enabled: false
+    kubernetes-api-servers:
+      enabled: false
+    kubernetes-nodes:
+      enabled: false
+    kubernetes-nodes-cadvisor:
+      enabled: false
+    kubernetes-service-endpoints:
+      enabled: false
+    kubernetes-service-endpoints-slow:
+      enabled: false
+    kubernetes-services:
+      enabled: false
+    kubernetes-pods:
+      enabled: false
+    kubernetes-pods-slow:
+      enabled: false
