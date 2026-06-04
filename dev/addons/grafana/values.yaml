@@ -55,26 +55,9 @@ grafana:
               customQuery: true
               query: '{namespace="default"} | json | trace_id="${__trace.traceId}"'
 
-  dashboardProviders:
-    dashboardproviders.yaml:
-      apiVersion: 1
-      providers:
-        - name: default
-          orgId: 1
-          folder: ""
-          type: file
-          disableDeletion: false
-          editable: true
-          options:
-            path: /var/lib/grafana/dashboards/default
-
-  dashboards:
-    default:
-      node-exporter:
-        gnetId: 1860
-        revision: 37
-        datasource: Prometheus
-      kubernetes-cluster:
-        gnetId: 7249
-        revision: 1
-        datasource: Prometheus
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      searchNamespace: ALL
