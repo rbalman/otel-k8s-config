@@ -12,7 +12,7 @@
 
 ```bash
 kind create cluster --config kind.yaml
-kubectl cluster-info --context kind-gokite-cluster
+kubectl cluster-info --context kind-test-cluster
 ```
 
 ---
@@ -59,26 +59,7 @@ kubectl port-forward svc/argocd-server -n argocd 9090:80
 
 ---
 
-## 3. Register the Git repository
-
-If the repository is private, register credentials before bootstrapping:
-
-```bash
-kubectl create secret generic gokite-repo \
-  --namespace argocd \
-  --from-literal=type=git \
-  --from-literal=url=https://github.com/rbalman/otel-k8s-config.git \
-  --from-literal=username=<github-username> \
-  --from-literal=password=<github-token>
-
-kubectl label secret gokite-repo \
-  --namespace argocd \
-  argocd.argoproj.io/secret-type=repository
-```
-
----
-
-## 4. Bootstrap the stack
+## 3. Bootstrap the stack
 
 ```bash
 kubectl apply -f dev/addons/bootstrap.yaml

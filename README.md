@@ -1,4 +1,4 @@
-# gokite
+# K8s Config
 
 Production-style Kubernetes observability stack on a local kind cluster, using a two-repository GitOps pattern.
 
@@ -46,7 +46,7 @@ Production-style Kubernetes observability stack on a local kind cluster, using a
 
 ```bash
 kind create cluster --config kind.yaml
-kubectl cluster-info --context kind-gokite-cluster
+kubectl cluster-info --context kind-test-cluster
 ```
 
 ### 2. Install ArgoCD

@@ -103,7 +103,7 @@ collector:
             value: dev
             action: insert
           - key: k8s.cluster.name
-            value: gokite
+            value: test-cluster
             action: insert
 
     exporters:

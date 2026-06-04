@@ -9,7 +9,7 @@ App-of-apps pattern: a single root ArgoCD Application renders a Helm chart that 
 ## Repository Structure
 
 ```
-gokite/
+otel-k8s-config/
 ├── kind.yaml
 ├── dev/                       #environment folder
 │   ├── argocd/
@@ -63,7 +63,7 @@ kubectl apply -f dev/apps/bootstrap.yaml
 
 ```yaml
 # dev/addons/stack/values.yaml
-appRepo: https://github.com/rbalman/gokite.git
+appRepo: https://github.com/rbalman/otel-k8s-config.git
 revision: HEAD
 addonsPath: dev/addons
 
