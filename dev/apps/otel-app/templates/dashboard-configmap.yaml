@@ -134,14 +134,36 @@ data:
         { "id": 70, "type": "row", "title": "Logs", "collapsed": false, "gridPos": { "x": 0, "y": 32, "w": 24, "h": 1 } },
 
         {
-          "id": 71, "title": "Log Level Distribution", "type": "timeseries",
-          "gridPos": { "x": 0, "y": 33, "w": 12, "h": 8 },
-          "fieldConfig": { "defaults": { "unit": "short", "custom": { "lineWidth": 2, "fillOpacity": 10 } } },
-          "options": { "legend": { "calcs": ["last", "max"], "displayMode": "table", "placement": "bottom" } },
+          "id": 71, "title": "Log Volume by Level", "type": "timeseries",
+          "gridPos": { "x": 0, "y": 33, "w": 8, "h": 10 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "custom": {
+                "drawStyle": "bars",
+                "lineWidth": 0,
+                "fillOpacity": 100,
+                "gradientMode": "none",
+                "stacking": { "group": "A", "mode": "normal" },
+                "barAlignment": 0
+              }
+            },
+            "overrides": [
+              { "matcher": { "id": "byName", "options": "error" },   "properties": [ { "id": "color", "value": { "fixedColor": "red",    "mode": "fixed" } } ] },
+              { "matcher": { "id": "byName", "options": "warn" },    "properties": [ { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } } ] },
+              { "matcher": { "id": "byName", "options": "warning" }, "properties": [ { "id": "color", "value": { "fixedColor": "yellow", "mode": "fixed" } } ] },
+              { "matcher": { "id": "byName", "options": "info" },    "properties": [ { "id": "color", "value": { "fixedColor": "green",  "mode": "fixed" } } ] },
+              { "matcher": { "id": "byName", "options": "debug" },   "properties": [ { "id": "color", "value": { "fixedColor": "blue",   "mode": "fixed" } } ] }
+            ]
+          },
+          "options": {
+            "legend": { "displayMode": "list", "placement": "bottom" },
+            "tooltip": { "mode": "multi", "sort": "none" }
+          },
           "targets": [
             {
               "datasource": { "type": "loki", "uid": "loki" },
-              "expr": "sum(count_over_time({app=\"otel-app\"} | json | level != \"\" [1m])) by (level)",
+              "expr": "sum(count_over_time({service_name=\"otel-app\"} | json | level != \"\" [$__interval])) by (level)",
               "legendFormat": "{{ "{{" }}level{{ "}}" }}"
             }
           ]
@@ -149,7 +171,7 @@ data:
 
         {
           "id": 72, "title": "Logs", "type": "logs",
-          "gridPos": { "x": 12, "y": 33, "w": 12, "h": 8 },
+          "gridPos": { "x": 8, "y": 33, "w": 16, "h": 10 },
           "options": {
             "dedupStrategy": "none",
             "enableLogDetails": true,
@@ -158,12 +180,12 @@ data:
             "showLabels": false,
             "showTime": true,
             "sortOrder": "Descending",
-            "wrapLogMessage": true
+            "wrapLogMessage": false
           },
           "targets": [
             {
               "datasource": { "type": "loki", "uid": "loki" },
-              "expr": "{app=\"otel-app\"}",
+              "expr": "{service_name=\"otel-app\"}",
               "legendFormat": ""
             }
           ]
