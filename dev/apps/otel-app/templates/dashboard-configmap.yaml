@@ -22,7 +22,7 @@ data:
           "gridPos": { "x": 0, "y": 1, "w": 6, "h": 4 },
           "fieldConfig": { "defaults": { "unit": "reqps", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] } } },
           "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "graphMode": "area", "colorMode": "value", "textMode": "auto" },
-          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{otel_scope_name=\"demo-app\"}[2m]))", "legendFormat": "rps" } ]
+          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{app=\"otel-app\"}[2m]))", "legendFormat": "rps" } ]
         },
 
         {
@@ -30,7 +30,7 @@ data:
           "gridPos": { "x": 6, "y": 1, "w": 6, "h": 4 },
           "fieldConfig": { "defaults": { "unit": "percentunit", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 0.01 }, { "color": "red", "value": 0.05 } ] } } },
           "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "graphMode": "area", "colorMode": "background", "textMode": "auto" },
-          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{otel_scope_name=\"demo-app\", http_status_code=~\"5..\"}[2m])) / sum(rate(http_requests_total{otel_scope_name=\"demo-app\"}[2m]))", "legendFormat": "error rate" } ]
+          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{app=\"otel-app\", http_status_code=~\"5..\"}[2m])) / sum(rate(http_requests_total{app=\"otel-app\"}[2m]))", "legendFormat": "error rate" } ]
         },
 
         {
@@ -38,7 +38,7 @@ data:
           "gridPos": { "x": 12, "y": 1, "w": 6, "h": 4 },
           "fieldConfig": { "defaults": { "unit": "s", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 0.1 }, { "color": "red", "value": 0.5 } ] } } },
           "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "graphMode": "area", "colorMode": "value", "textMode": "auto" },
-          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{otel_scope_name=\"demo-app\"}[2m])) by (le))", "legendFormat": "p50" } ]
+          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{app=\"otel-app\"}[2m])) by (le))", "legendFormat": "p50" } ]
         },
 
         {
@@ -46,7 +46,7 @@ data:
           "gridPos": { "x": 18, "y": 1, "w": 6, "h": 4 },
           "fieldConfig": { "defaults": { "unit": "s", "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "yellow", "value": 0.5 }, { "color": "red", "value": 1 } ] } } },
           "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "graphMode": "area", "colorMode": "background", "textMode": "auto" },
-          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{otel_scope_name=\"demo-app\"}[2m])) by (le))", "legendFormat": "p99" } ]
+          "targets": [ { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{app=\"otel-app\"}[2m])) by (le))", "legendFormat": "p99" } ]
         },
 
         { "id": 20, "type": "row", "title": "Traffic", "collapsed": false, "gridPos": { "x": 0, "y": 5, "w": 24, "h": 1 } },
@@ -57,7 +57,7 @@ data:
           "fieldConfig": { "defaults": { "unit": "reqps", "custom": { "lineWidth": 2, "fillOpacity": 10 } } },
           "options": { "legend": { "calcs": ["last", "max"], "displayMode": "table", "placement": "bottom" } },
           "targets": [
-            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{otel_scope_name=\"demo-app\"}[2m])) by (http_route, http_method)", "legendFormat": "{{ "{{" }}http_method{{ "}}" }} {{ "{{" }}http_route{{ "}}" }}" }
+            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{app=\"otel-app\"}[2m])) by (http_route, http_method)", "legendFormat": "{{ "{{" }}http_method{{ "}}" }} {{ "{{" }}http_route{{ "}}" }}" }
           ]
         },
 
@@ -67,7 +67,7 @@ data:
           "fieldConfig": { "defaults": { "unit": "reqps", "custom": { "lineWidth": 2, "fillOpacity": 10 } } },
           "options": { "legend": { "calcs": ["last", "max"], "displayMode": "table", "placement": "bottom" } },
           "targets": [
-            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{otel_scope_name=\"demo-app\"}[2m])) by (http_status_code, http_route)", "legendFormat": "{{ "{{" }}http_status_code{{ "}}" }} {{ "{{" }}http_route{{ "}}" }}" }
+            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_requests_total{app=\"otel-app\"}[2m])) by (http_status_code, http_route)", "legendFormat": "{{ "{{" }}http_status_code{{ "}}" }} {{ "{{" }}http_route{{ "}}" }}" }
           ]
         },
 
@@ -81,7 +81,7 @@ data:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "sum(rate(http_requests_total{otel_scope_name=\"demo-app\", http_status_code=~\"5..\"}[2m])) by (http_route) / sum(rate(http_requests_total{otel_scope_name=\"demo-app\"}[2m])) by (http_route)",
+              "expr": "sum(rate(http_requests_total{app=\"otel-app\", http_status_code=~\"5..\"}[2m])) by (http_route) / sum(rate(http_requests_total{app=\"otel-app\"}[2m])) by (http_route)",
               "legendFormat": "5xx {{ "{{" }}http_route{{ "}}" }}"
             }
           ]
@@ -93,7 +93,7 @@ data:
           "fieldConfig": { "defaults": { "unit": "reqps", "custom": { "lineWidth": 2, "fillOpacity": 10 } } },
           "options": { "legend": { "calcs": ["last", "max"], "displayMode": "table", "placement": "bottom" } },
           "targets": [
-            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_errors_total{otel_scope_name=\"demo-app\"}[2m])) by (http_route, http_status_code)", "legendFormat": "{{ "{{" }}http_status_code{{ "}}" }} {{ "{{" }}http_route{{ "}}" }}" }
+            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "sum(rate(http_errors_total{app=\"otel-app\"}[2m])) by (http_route, http_status_code)", "legendFormat": "{{ "{{" }}http_status_code{{ "}}" }} {{ "{{" }}http_route{{ "}}" }}" }
           ]
         },
 
@@ -105,9 +105,9 @@ data:
           "fieldConfig": { "defaults": { "unit": "s", "custom": { "lineWidth": 2, "fillOpacity": 5 } } },
           "options": { "legend": { "calcs": ["last", "mean", "max"], "displayMode": "table", "placement": "bottom" } },
           "targets": [
-            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{otel_scope_name=\"demo-app\"}[2m])) by (le, http_route))", "legendFormat": "p50 {{ "{{" }}http_route{{ "}}" }}" },
-            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{otel_scope_name=\"demo-app\"}[2m])) by (le, http_route))", "legendFormat": "p95 {{ "{{" }}http_route{{ "}}" }}" },
-            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{otel_scope_name=\"demo-app\"}[2m])) by (le, http_route))", "legendFormat": "p99 {{ "{{" }}http_route{{ "}}" }}" }
+            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{app=\"otel-app\"}[2m])) by (le, http_route))", "legendFormat": "p50 {{ "{{" }}http_route{{ "}}" }}" },
+            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{app=\"otel-app\"}[2m])) by (le, http_route))", "legendFormat": "p95 {{ "{{" }}http_route{{ "}}" }}" },
+            { "datasource": { "type": "prometheus", "uid": "prometheus" }, "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{app=\"otel-app\"}[2m])) by (le, http_route))", "legendFormat": "p99 {{ "{{" }}http_route{{ "}}" }}" }
           ]
         },
 
@@ -124,7 +124,7 @@ data:
           "targets": [
             {
               "datasource": { "type": "prometheus", "uid": "prometheus" },
-              "expr": "sum(rate(http_server_request_duration_seconds_bucket{otel_scope_name=~\"go\\\\.opentelemetry.*\"}[2m])) by (le)",
+              "expr": "sum(rate(http_server_request_duration_seconds_bucket{app=\"otel-app\"}[2m])) by (le)",
               "legendFormat": "{{ "{{" }}le{{ "}}" }}",
               "format": "heatmap"
             }
