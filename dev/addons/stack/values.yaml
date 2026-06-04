@@ -1,4 +1,4 @@
-appRepo: https://github.com/rbalman/temp-repo.git
+appRepo: https://github.com/rbalman/otel-k8s-config.git
 revision: HEAD
 addonsPath: dev/addons
 

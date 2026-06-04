@@ -67,7 +67,7 @@ If the repository is private, register credentials before bootstrapping:
 kubectl create secret generic gokite-repo \
   --namespace argocd \
   --from-literal=type=git \
-  --from-literal=url=https://github.com/rbalman/temp-repo.git \
+  --from-literal=url=https://github.com/rbalman/otel-k8s-config.git \
   --from-literal=username=<github-username> \
   --from-literal=password=<github-token>
 

@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/rbalman/temp-repo.git
+    repoURL: https://github.com/rbalman/otel-k8s-config.git
     targetRevision: HEAD
     path: dev/apps/stack
   destination:
