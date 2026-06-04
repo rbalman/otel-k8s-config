@@ -1,5 +1,5 @@
 valuesRepo: https://github.com/rbalman/temp-repo.git
-valuesRevision: HEAD
+valuesRevision: working-setup-with-kube-prometheus-stack
 addonsPath: dev/addons
 
 apps:
