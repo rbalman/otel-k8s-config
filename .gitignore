@@ -1,6 +1,7 @@
 # Helm
 charts/
 *.tgz
+Chart.lock
 
 # Go
 apps/*/bin/

@@ -1,6 +1,0 @@
-dependencies:
-- name: otel-app-chart
-  repository: https://rbalman.github.io/otel-app
-  version: 0.4.0
-digest: sha256:a90c3934cbb061020b3d9615bdecfb2db98c5d404793c3740ba6921d7db76a98
-generated: "2026-06-04T14:57:35.93508+05:45"
