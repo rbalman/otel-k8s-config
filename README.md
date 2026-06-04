@@ -117,8 +117,8 @@ Once ingress controller is deployed services are exposed via ingress on port `80
 
 | # | Title | Doc |
 |---|---|---|
-| Part 1 | Application Deployment | [docs/app-deployment.md](docs/app-deployment.md) |
-| Part 2 | CI/CD Pipeline | [docs/cicd-pipeline.md](docs/cicd-pipeline.md) |
+| Part 1 | Application Deployment | [otel-app repository README](https://github.com/rbalman/otel-app) |
+| Part 2 | CI/CD Pipeline | [otel-app repository README](https://github.com/rbalman/otel-app) |
 | Part 3 | GitOps (ArgoCD-style) | [docs/gitops-argocd.md](docs/gitops-argocd.md) |
 | Part 4 | Observability | [docs/observability.md](docs/observability.md) |
 | Part 5 | Debugging: Ingress 502/504 | [docs/debugging-ingress-502-504.md](docs/debugging-ingress-502-504.md) |
