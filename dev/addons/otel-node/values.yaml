@@ -51,6 +51,8 @@ collector:
 
     receivers:
       otlp: null  # nulled to prevent "receiver declared but not used" error
+      kubeletstats:
+        insecure_skip_verify: true  # kind kubelet cert has no IP SAN
 
     processors:
       memory_limiter:
