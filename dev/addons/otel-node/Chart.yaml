@@ -5,4 +5,4 @@ dependencies:
   - name: opentelemetry-collector
     alias: collector
     repository: https://open-telemetry.github.io/opentelemetry-helm-charts
-    version: 0.116.0
+    version: 0.158.0
