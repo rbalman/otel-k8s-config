@@ -2,15 +2,14 @@
 
 Production-style Kubernetes observability stack on a local kind cluster, using a two-repository GitOps pattern. This task includes:
 
-- Instrumentation of app using otel sdk(All three signals with co-relation)
-- CI for building/scanning/semantic tagging/pushing to docker hub
-- CI for building helm chart for otel app
+- Instrumentation of sample app with otel sdk(All three signals with co-relation)
+- CI for building/scanning/semantic tagging/pushing sample app to docker hub
+- CI for building helm chart for sample app
 - CD with argocd app of apps pattern
 - Otel Collector for collection, processing, exporting of telemetry singals
 - prometheus, jeager, loki for storing metrics, traces and logs respectively
 - Grafana for visualizing the logs
 - Deployed/Tested on kind cluster but should be portable with any k8s cluster.
-- Also includes debugging and security best practices to follow
 
 ## Overview
 
