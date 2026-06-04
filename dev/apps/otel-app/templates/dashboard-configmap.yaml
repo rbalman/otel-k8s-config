@@ -129,6 +129,44 @@ data:
               "format": "heatmap"
             }
           ]
+        },
+
+        { "id": 70, "type": "row", "title": "Logs", "collapsed": false, "gridPos": { "x": 0, "y": 32, "w": 24, "h": 1 } },
+
+        {
+          "id": 71, "title": "Log Level Distribution", "type": "timeseries",
+          "gridPos": { "x": 0, "y": 33, "w": 12, "h": 8 },
+          "fieldConfig": { "defaults": { "unit": "short", "custom": { "lineWidth": 2, "fillOpacity": 10 } } },
+          "options": { "legend": { "calcs": ["last", "max"], "displayMode": "table", "placement": "bottom" } },
+          "targets": [
+            {
+              "datasource": { "type": "loki", "uid": "loki" },
+              "expr": "sum(count_over_time({app=\"otel-app\"} | json | level != \"\" [1m])) by (level)",
+              "legendFormat": "{{ "{{" }}level{{ "}}" }}"
+            }
+          ]
+        },
+
+        {
+          "id": 72, "title": "Logs", "type": "logs",
+          "gridPos": { "x": 12, "y": 33, "w": 12, "h": 8 },
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false,
+            "showTime": true,
+            "sortOrder": "Descending",
+            "wrapLogMessage": true
+          },
+          "targets": [
+            {
+              "datasource": { "type": "loki", "uid": "loki" },
+              "expr": "{app=\"otel-app\"}",
+              "legendFormat": ""
+            }
+          ]
         }
 
       ]
