@@ -1,8 +1,10 @@
-repoURL: https://github.com/rbalman/temp-repo.git
-targetRevision: HEAD
+valuesRepo: https://github.com/rbalman/temp-repo.git
+valuesRevision: HEAD
 appsPath: dev/apps
 
 apps:
-  demo:
+  otel-app:
     namespace: default
-    path: apps/demo/helm
+    chartRepo: https://rbalman.github.io/otel-app
+    chart: otel-app-chart
+    version: 0.1.0

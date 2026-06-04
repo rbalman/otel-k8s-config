@@ -4,6 +4,6 @@ image:
   pullPolicy: IfNotPresent
 
 otel:
-  serviceName: demo-app
+  serviceName: otel-app
   endpoint: otel-collector-opentelemetry-collector.monitoring.svc.cluster.local:4317
   resourceAttributes: "environment=dev,k8s.cluster.name=gokite"

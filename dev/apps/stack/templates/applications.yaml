@@ -16,14 +16,14 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: {{ $.Values.repoURL }}
-      targetRevision: {{ $.Values.targetRevision }}
-      path: {{ $app.path }}
+    - repoURL: {{ $app.chartRepo }}
+      chart: {{ $app.chart }}
+      targetRevision: {{ $app.version }}
       helm:
         valueFiles:
           - $values/{{ $valuesPath }}
-    - repoURL: {{ $.Values.repoURL }}
-      targetRevision: {{ $.Values.targetRevision }}
+    - repoURL: {{ $app.valuesRepo | default $.Values.valuesRepo }}
+      targetRevision: {{ $app.valuesRevision | default $.Values.valuesRevision }}
       ref: values
   destination:
     server: https://kubernetes.default.svc
