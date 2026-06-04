@@ -1,40 +1,41 @@
-server:
-  retention: "3d"
-  extraFlags:
-    - web.enable-remote-write-receiver
-    - enable-feature=otlp-write-receiver
-  global:
-    external_labels:
-      cluster: local
-  persistentVolume:
-    storageClass: standard
-    size: 1Gi
-  resources:
-    requests:
-      cpu: 100m
-      memory: 800Mi
-    limits:
-      cpu: 500m
-      memory: 2Gi
+prometheus:
+  server:
+    retention: "3d"
+    extraFlags:
+      - web.enable-remote-write-receiver
+      - enable-feature=otlp-write-receiver
+    global:
+      external_labels:
+        cluster: local
+    persistentVolume:
+      storageClass: standard
+      size: 1Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 800Mi
+      limits:
+        cpu: 500m
+        memory: 2Gi
 
-alertmanager:
-  enabled: true
-  persistence:
-    storageClass: standard
-    size: 1Gi
-  resources:
-    requests:
-      cpu: 10m
-      memory: 128Mi
-    limits:
-      cpu: 200m
-      memory: 512Mi
+  alertmanager:
+    enabled: true
+    persistence:
+      storageClass: standard
+      size: 1Gi
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
 
-prometheus-pushgateway:
-  enabled: false
+  prometheus-pushgateway:
+    enabled: false
 
-kube-state-metrics:
-  enabled: false
+  kube-state-metrics:
+    enabled: false
 
-prometheus-node-exporter:
-  enabled: false
+  prometheus-node-exporter:
+    enabled: false

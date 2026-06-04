@@ -1,18 +1,19 @@
-allInOne:
-  enabled: true
+jaeger:
+  allInOne:
+    enabled: true
 
-provisionDataStore:
-  cassandra: false
+  provisionDataStore:
+    cassandra: false
 
-storage:
-  type: memory
+  storage:
+    type: memory
 
-collector:
-  service:
-    otlp:
-      grpc:
-        name: otlp-grpc
-        port: 4317
-      http:
-        name: otlp-http
-        port: 4318
+  collector:
+    service:
+      otlp:
+        grpc:
+          name: otlp-grpc
+          port: 4317
+        http:
+          name: otlp-http
+          port: 4318

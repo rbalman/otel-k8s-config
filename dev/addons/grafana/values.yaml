@@ -1,73 +1,74 @@
-adminPassword: changeme
+grafana:
+  adminPassword: changeme
 
-persistence:
-  enabled: true
-  storageClassName: standard
-  size: 2Gi
+  persistence:
+    enabled: true
+    storageClassName: standard
+    size: 2Gi
 
-resources:
-  requests:
-    cpu: 100m
-    memory: 256Mi
-  limits:
-    cpu: 500m
-    memory: 512Mi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
-datasources:
-  datasources.yaml:
-    apiVersion: 1
-    datasources:
-      - name: Prometheus
-        type: prometheus
-        uid: prometheus
-        url: http://prometheus-server.monitoring.svc.cluster.local
-        isDefault: true
-        access: proxy
-      - name: Loki
-        type: loki
-        uid: loki
-        url: http://loki-gateway.loki.svc.cluster.local
-        access: proxy
-        jsonData:
-          derivedFields:
-            - name: trace_id
-              matcherType: label
-              matcherRegex: trace_id
-              url: "$${__value.raw}"
-              datasourceUid: jaeger
-      - name: Jaeger
-        type: jaeger
-        uid: jaeger
-        url: http://jaeger.monitoring.svc.cluster.local:16686
-        access: proxy
-        jsonData:
-          tracesToLogs:
-            datasourceUid: loki
-            filterByTraceID: true
-            filterBySpanID: false
-            customQuery: true
-            query: '{namespace="default"} | json | trace_id="${__trace.traceId}"'
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          uid: prometheus
+          url: http://prometheus-server.monitoring.svc.cluster.local
+          isDefault: true
+          access: proxy
+        - name: Loki
+          type: loki
+          uid: loki
+          url: http://loki-gateway.loki.svc.cluster.local
+          access: proxy
+          jsonData:
+            derivedFields:
+              - name: trace_id
+                matcherType: label
+                matcherRegex: trace_id
+                url: "$${__value.raw}"
+                datasourceUid: jaeger
+        - name: Jaeger
+          type: jaeger
+          uid: jaeger
+          url: http://jaeger.monitoring.svc.cluster.local:16686
+          access: proxy
+          jsonData:
+            tracesToLogs:
+              datasourceUid: loki
+              filterByTraceID: true
+              filterBySpanID: false
+              customQuery: true
+              query: '{namespace="default"} | json | trace_id="${__trace.traceId}"'
 
-dashboardProviders:
-  dashboardproviders.yaml:
-    apiVersion: 1
-    providers:
-      - name: default
-        orgId: 1
-        folder: ""
-        type: file
-        disableDeletion: false
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/default
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
 
-dashboards:
-  default:
-    node-exporter:
-      gnetId: 1860
-      revision: 37
-      datasource: Prometheus
-    kubernetes-cluster:
-      gnetId: 7249
-      revision: 1
-      datasource: Prometheus
+  dashboards:
+    default:
+      node-exporter:
+        gnetId: 1860
+        revision: 37
+        datasource: Prometheus
+      kubernetes-cluster:
+        gnetId: 7249
+        revision: 1
+        datasource: Prometheus

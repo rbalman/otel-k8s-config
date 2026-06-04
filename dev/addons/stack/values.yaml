@@ -6,49 +6,27 @@ apps:
   minio:
     syncWave: "1"
     namespace: minio
-    chartRepo: https://charts.min.io/
-    chart: minio
-    version: 5.4.0
 
   prometheus:
     syncWave: "2"
     namespace: monitoring
-    chartRepo: https://prometheus-community.github.io/helm-charts
-    chart: prometheus
-    version: 27.5.1
 
   grafana:
     syncWave: "2"
     namespace: monitoring
-    chartRepo: https://grafana.github.io/helm-charts
-    chart: grafana
-    version: 8.10.4
 
   loki:
     syncWave: "3"
     namespace: loki
-    chartRepo: https://grafana.github.io/helm-charts
-    chart: loki
-    version: 7.0.0
-
 
   jaeger:
     syncWave: "3"
     namespace: monitoring
-    chartRepo: https://jaegertracing.github.io/helm-charts
-    chart: jaeger
-    version: 4.8.0
 
   otel-cluster:
     syncWave: "4"
     namespace: monitoring
-    chartRepo: https://open-telemetry.github.io/opentelemetry-helm-charts
-    chart: opentelemetry-collector
-    version: 0.116.0
 
   otel-node:
     syncWave: "4"
     namespace: monitoring
-    chartRepo: https://open-telemetry.github.io/opentelemetry-helm-charts
-    chart: opentelemetry-collector
-    version: 0.116.0

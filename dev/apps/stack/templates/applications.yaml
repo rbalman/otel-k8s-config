@@ -1,6 +1,5 @@
 {{- range $name, $app := .Values.apps }}
 {{- if ne $app.enabled false }}
-{{- $valuesPath := $app.valuesPath | default (printf "%s/%s/values.yaml" $.Values.appsPath $name) }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -15,16 +14,10 @@ metadata:
     - resources-finalizer.argocd.io
 spec:
   project: default
-  sources:
-    - repoURL: {{ $app.chartRepo }}
-      chart: {{ $app.chart }}
-      targetRevision: {{ $app.version }}
-      helm:
-        valueFiles:
-          - $values/{{ $valuesPath }}
-    - repoURL: {{ $app.appRepo | default $.Values.appRepo }}
-      targetRevision: {{ $app.revision | default $.Values.revision }}
-      ref: values
+  source:
+    repoURL: {{ $.Values.appRepo }}
+    targetRevision: {{ $.Values.revision }}
+    path: {{ $.Values.appsPath }}/{{ $name }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ $app.namespace }}
