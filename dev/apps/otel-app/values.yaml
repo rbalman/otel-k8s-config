@@ -1,9 +1,17 @@
 image:
   repository: balman/otel-demo
-  tag: v0.0.3
+  tag: v0.0.4
   pullPolicy: IfNotPresent
 
-otel:
-  serviceName: otel-app
-  endpoint: otel-collector-opentelemetry-collector.monitoring.svc.cluster.local:4317
-  resourceAttributes: "environment=dev,k8s.cluster.name=gokite"
+extraEnvs:
+  - name: OTEL_SERVICE_NAME
+    value: otel-app
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: otel-cluster.monitoring.svc.cluster.local:4317
+  - name: OTEL_RESOURCE_ATTRIBUTES
+    value: "hey=jude"
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/path: /metrics
+  prometheus.io/port: "8080"

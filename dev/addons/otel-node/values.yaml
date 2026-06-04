@@ -2,6 +2,7 @@
 # kubeletMetrics and hostMetrics can only see the node they run on;
 # logsCollection reads /var/log/pods on each node.
 mode: daemonset
+fullnameOverride: otel-node
 
 image:
   repository: otel/opentelemetry-collector-k8s
