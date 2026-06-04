@@ -1,5 +1,5 @@
-valuesRepo: https://github.com/rbalman/temp-repo.git
-valuesRevision: HEAD
+appRepo: https://github.com/rbalman/temp-repo.git
+revision: HEAD
 addonsPath: dev/addons
 
 apps:

@@ -22,8 +22,8 @@ spec:
       helm:
         valueFiles:
           - $values/{{ $valuesPath }}
-    - repoURL: {{ $app.valuesRepo | default $.Values.valuesRepo }}
-      targetRevision: {{ $app.valuesRevision | default $.Values.valuesRevision }}
+    - repoURL: {{ $app.appRepo | default $.Values.appRepo }}
+      targetRevision: {{ $app.revision | default $.Values.revision }}
       ref: values
   destination:
     server: https://kubernetes.default.svc
