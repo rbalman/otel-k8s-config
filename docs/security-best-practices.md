@@ -92,7 +92,7 @@ I like to think production security interms of 4 Layers commonly known as 4Cs `C
 
 ---
 
-## Improvements
+## Other Improvements
 
 - Use Managed Kubernetes Cluster like EKS
 - Use Karpetener for adavance autoscaling
