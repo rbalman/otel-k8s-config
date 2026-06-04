@@ -1,48 +1,48 @@
-repoURL: https://github.com/rbalman/temp-repo.git
-targetRevision: HEAD
+valuesRepo: https://github.com/rbalman/temp-repo.git
+valuesRevision: HEAD
 addonsPath: dev/addons
 
 apps:
   minio:
     syncWave: "1"
     namespace: minio
-    repoURL: https://charts.min.io/
+    chartRepo: https://charts.min.io/
     chart: minio
-    targetRevision: 5.4.0
+    version: 5.4.0
 
   prom-stack:
     syncWave: "2"
     namespace: monitoring
-    repoURL: https://prometheus-community.github.io/helm-charts
+    chartRepo: https://prometheus-community.github.io/helm-charts
     chart: kube-prometheus-stack
-    targetRevision: 84.0.1
+    version: 84.0.1
     extraSyncOptions:
       - ServerSideApply=true
 
   loki:
     syncWave: "3"
     namespace: loki
-    repoURL: https://grafana.github.io/helm-charts
+    chartRepo: https://grafana.github.io/helm-charts
     chart: loki
-    targetRevision: 7.0.0
+    version: 7.0.0
 
   alloy:
     syncWave: "4"
     namespace: loki
-    repoURL: https://grafana.github.io/helm-charts
+    chartRepo: https://grafana.github.io/helm-charts
     chart: alloy
-    targetRevision: 0.12.5
+    version: 0.12.5
 
   jaeger:
     syncWave: "3"
     namespace: monitoring
-    repoURL: https://jaegertracing.github.io/helm-charts
+    chartRepo: https://jaegertracing.github.io/helm-charts
     chart: jaeger
-    targetRevision: 4.8.0
+    version: 4.8.0
 
   otel-collector:
     syncWave: "4"
     namespace: monitoring
-    repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+    chartRepo: https://open-telemetry.github.io/opentelemetry-helm-charts
     chart: opentelemetry-collector
-    targetRevision: 0.116.0
+    version: 0.116.0
