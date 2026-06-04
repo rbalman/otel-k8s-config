@@ -25,6 +25,7 @@ helm repo update
 
 helm upgrade --install argocd argo/argo-cd \
   --namespace argocd \
+  --version 9.5.17 \
   --create-namespace \
   --values dev/argocd/values.yaml
 ```
