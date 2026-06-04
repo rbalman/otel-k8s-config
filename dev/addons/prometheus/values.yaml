@@ -42,7 +42,7 @@ prometheus:
 
   scrapeConfigs:
     prometheus:
-      enabled: false
+      enabled: true
     prometheus-pushgateway:
       enabled: false
     kubernetes-api-servers:
