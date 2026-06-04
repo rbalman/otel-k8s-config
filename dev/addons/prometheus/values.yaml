@@ -3,7 +3,7 @@ prometheus:
     retention: "3d"
     extraFlags:
       - web.enable-remote-write-receiver
-      - enable-feature=otlp-write-receiver
+      - web.enable-otlp-receiver
     global:
       external_labels:
         cluster: local

@@ -4,29 +4,36 @@ addonsPath: dev/addons
 
 apps:
   minio:
+    enabled: true
     syncWave: "1"
     namespace: minio
 
   prometheus:
+    enabled: true
     syncWave: "2"
     namespace: monitoring
 
   grafana:
+    enabled: true
     syncWave: "2"
     namespace: monitoring
 
   loki:
+    enabled: true
     syncWave: "3"
     namespace: loki
 
   jaeger:
+    enabled: true
     syncWave: "3"
     namespace: monitoring
 
   otel-cluster:
+    enabled: true
     syncWave: "4"
     namespace: monitoring
 
   otel-node:
+    enabled: true
     syncWave: "4"
     namespace: monitoring
