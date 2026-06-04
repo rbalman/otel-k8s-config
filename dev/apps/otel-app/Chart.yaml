@@ -5,4 +5,4 @@ dependencies:
   - name: otel-app-chart
     alias: app
     repository: https://rbalman.github.io/otel-app
-    version: 0.4.0
+    version: 0.5.0
