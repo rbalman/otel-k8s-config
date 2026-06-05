@@ -107,7 +107,7 @@ I have loosely categorized security measures below for structure and readability
 - Prefer short-lived dynamically issued credentials over long-lived secrets
 
 ### Defense in Depth
-- Treat SAST, DAST, and SCA as distinct CI gates — not just "dependency scanning"
+- Use CI gates for static code analysis, runtime vulnerability testing, and dependency scanning.
 - Define quality gates: test coverage thresholds, vulnerability count and severity limits
 - For critical systems, consider periodic penetration testing
 - Shift left with linters and security plugins during development for faster feedback before changes reach production

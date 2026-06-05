@@ -6,9 +6,9 @@ Production-style Kubernetes observability stack on a local kind cluster, using a
 - CI for building/scanning/semantic tagging/pushing sample app to docker hub
 - CI for building helm chart for sample app
 - CD with argocd app of apps pattern
-- Otel Collector for collection, processing, exporting of telemetry singals
-- prometheus, jeager, loki for storing metrics, traces and logs respectively
-- Grafana for visualizing the logs
+- Otel Collector for collection, processing, exporting of telemetry signals
+- prometheus, jaeger, loki for storing metrics, traces and logs respectively
+- Grafana for visualizing metrics, traces and logs
 - Deployed/Tested on kind cluster but should be portable with any k8s cluster.
 
 ## Overview
@@ -67,7 +67,7 @@ helm upgrade --install argocd dev/argocd \
   --dependency-update
 ```
 
-Wait for Argocd to be come stable and Retrieve the initial admin password:
+Wait for ArgoCD to become ready (`kubectl get pods -n argocd -w`) and retrieve the initial admin password:
 
 ```bash
 kubectl get secret argocd-initial-admin-secret \
