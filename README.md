@@ -132,3 +132,25 @@ Once ingress controller is deployed services are exposed via ingress on port `80
 | Part 4 | Observability | [docs/observability.md](docs/observability.md) |
 | Part 5 | Debugging: Ingress 502/504 | [docs/debugging-ingress-502-504.md](docs/debugging-ingress-502-504.md) |
 | Part 6 | Security & Best Practices | [docs/security-best-practices.md](docs/security-best-practices.md) |
+
+---
+
+## Demo Screenshots
+
+**Default namespace** — otel-app pod running in the default namespace.
+![default-ns](docs/images/screenshots/default-ns.png)
+
+**Monitoring namespace** — all observability stack pods (Prometheus, Grafana, Loki, Jaeger, OTel Collector) running healthy.
+![monitoring-ns](docs/images/screenshots/monitoring-ns.png)
+
+**Prometheus** — querying HTTP request rate for the otel-app broken down by route and method.
+![prometheus](docs/images/screenshots/prometheus.png)
+
+**Logs** — structured logs from the otel-app in Grafana Loki with direct trace correlation links to Jaeger.
+![logs](docs/images/screenshots/logs.png)
+
+**Traces** — end-to-end distributed trace for `otel-app GET /api/error` viewed via Grafana's Jaeger data source.
+![traces](docs/images/screenshots/traces.png)
+
+**MinIO** — object browser showing the Loki bucket (10.5 MiB) used as S3-compatible log storage backend.
+![minio](docs/images/screenshots/minio.png)

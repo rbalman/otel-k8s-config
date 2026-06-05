@@ -1,13 +1,16 @@
 # Part 5 — Debugging: Ingress 502/504
 
-The service is deployed, pods show `Running`, but returns a `502` or `504`.
+Scenario: The service is deployed, pods show `Running`, but returns a `502` or `504`.
 
-- `502` — mostly a configuration issue: port mismatch, selector mismatch, app crashing.
-- `504` — mostly the app not responding in time: hung, slow startup, under-resourced, improper readiness probe.
+- `502` — mostly because of a configuration issue: port mismatch, selector mismatch, app crashing.
+- `504` — mostly because app is not responding: hung, slow startup, under-resourced, improper readiness probe.
 
-In general if I see `502` status code, I try to look for misconfiguration but if it `504` status code I will try to look at application load, resource allocation, app errors, db query or similar heavy operations.
+In general if I see
 
-To systematically analyze these errors, I might follow following steps but also directly jump to any steps based on scenario and judements.
+- `502` status code, I try to look for network components misconfiguration. 
+- `504` status code, I try to look at the application status like: current load, resource allocation, app errors, db query or similar heavy operations.
+
+The steps below are a starting point — in practice I jump directly to whichever layer the symptoms point at.
 
 ---
 
@@ -27,10 +30,11 @@ Best to check ingress config like service name, port especially when `502` statu
 
 **3. Check the Service has endpoints**
 
-`Running` != `Ready`. If the readiness probe is failing, Kubernetes pulls the pod out of the endpoint slice and nginx has nowhere to send traffic.
+`Running` != `Ready` 
+Running pod doesn't mean the pod is ready to serve the traffic.
 
-
-If there is no endpoints, either the readiness probe is failing or the Service selector doesn't match the pod labels.
+- If the readiness probe is failing, Kubernetes pulls the pod out of the endpoint slice and nginx has nowhere to send traffic.
+- If there is no endpoints, either the readiness probe is failing or the Service selector doesn't match the pod labels.
 
 ---
 
@@ -49,3 +53,12 @@ If this works but nginx still 502s, the problem is in the Ingress/Service config
 **6. Verify port alignment**
 
 A common silent failure is also port mismatch either on ingress to service or service to container. Better to verify this.
+
+**7. Fixing the root cause**
+
+If there is no config issue, the `504` has an application-level cause. Distributed tracing is particularly useful here — span durations quickly reveal whether the timeout originates in the app, a downstream service, or a slow query:
+
+- Horizontally or vertically scale the application if it is resource-constrained
+- Scale or optimize dependent components (API, DB) if they are the bottleneck
+- Fix inefficient or buggy code if the slowness is self-contained
+- Check and tune ingress timeout annotations (`proxy-read-timeout`, `proxy-send-timeout`) — the app may be responding correctly but slower than the default timeout allows
