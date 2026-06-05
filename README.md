@@ -51,6 +51,8 @@ Production-style Kubernetes observability stack on a local kind cluster, using a
 
 ## Getting Started
 
+NOTE: In production, terraform should be used to create cluster, install argocd and boostrap argocd app of apps.
+
 ### 1. Create the cluster
 
 ```bash
