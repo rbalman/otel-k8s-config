@@ -29,13 +29,14 @@ Production-style Kubernetes observability stack on a local kind cluster, using a
 | **Package mgmt** | [Helm](https://helm.sh) | Wrapper charts for all addons and the app |
 | **CI** | [GitHub Actions](https://github.com/features/actions) | Build, scan, push image; release Helm chart |
 | **Container registry** | [Docker Hub](https://hub.docker.com) | Hosts `balman/otel-demo` app image |
-| **Ingress** | [ingress-nginx](https://kubernetes.github.io/ingress-nginx) | Host-based routing (`*.localhost`) |
-| **Object storage** | [MinIO](https://min.io) | S3-compatible backend for Loki |
-| **Metrics** | [Prometheus](https://prometheus.io) | Metrics storage, OTLP receiver |
-| **Visualization** | [Grafana](https://grafana.com) | Dashboards (sidecar provisioning), alerting |
-| **Logs** | [Loki](https://grafana.com/oss/loki) | Log aggregation, stored in MinIO |
-| **Traces** | [Jaeger](https://www.jaegertracing.io) | Distributed trace storage and UI |
-| **Telemetry pipeline** | [OpenTelemetry Collector](https://opentelemetry.io/docs/collector) | Scrapes pods, receives OTLP, fans out to Prometheus/Loki/Jaeger |
+| **Ingress** | [ingress-nginx](dev/addons/ingress/README.md) | Host-based routing (`*.localhost`) |
+| **Object storage** | [MinIO](dev/addons/minio/README.md) | S3-compatible backend for Loki |
+| **Metrics** | [Prometheus](dev/addons/prometheus/README.md) | Metrics storage, OTLP receiver |
+| **Visualization** | [Grafana](dev/addons/grafana/README.md) | Dashboards (sidecar provisioning), alerting |
+| **Logs** | [Loki](dev/addons/loki/README.md) | Log aggregation, stored in MinIO |
+| **Traces** | [Jaeger](dev/addons/jaeger/README.md) | Distributed trace storage and UI |
+| **Telemetry pipeline (cluster)** | [OTel Collector — cluster](dev/addons/otel-cluster/README.md) | Receives OTLP, scrapes pods, fans out to Prometheus/Jaeger |
+| **Telemetry pipeline (node)** | [OTel Collector — node](dev/addons/otel-node/README.md) | Collects kubelet/host metrics and pod logs, fans out to Prometheus/Loki |
 | **Security scanning** | [Trivy](https://trivy.dev) + [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck) | Container image scan, Go vulnerability check in CI |
 | **App language** | [Go](https://go.dev) | Demo service with OTel SDK instrumentation |
 
