@@ -54,6 +54,7 @@ I have loosely categorized security measures below for structure and readability
 - Log and monitor all control plane components including API server audit logs
 - Use CNIs with network policy support and visibility (e.g., Cilium)
 - Admission controllers (Kyverno or OPA/Gatekeeper) to enforce security policies at scale — RBAC alone is not sufficient
+- Falco as a DaemonSet for runtime threat detection: catches shell spawns inside containers, writes to sensitive paths (e.g., `/etc`, `/proc`), unexpected outbound connections, privilege escalation, and container escape attempts; route alerts via Falcosidekick to your SIEM, Slack, or PagerDuty
 
 ### Reduce Attack Surface
 - External secrets management (HashiCorp Vault, AWS Secrets Manager, 1Password); never store secrets in plaintext
